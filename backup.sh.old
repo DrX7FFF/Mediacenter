@@ -1,0 +1,2 @@
+#! /bin/bash
+scp -r root@192.168.1.102:/storage/.config/{dockers,samba.conf} ./configfiles
