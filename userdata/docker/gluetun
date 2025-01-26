@@ -1,0 +1,62 @@
+#! /bin/bash
+
+# https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/protonvpn.md
+
+
+docker run -d \
+  --name=vpn \
+  --cap-add NET_ADMIN \
+  --device /dev/net/tun \
+  -e VPN_SERVICE_PROVIDER=protonvpn \
+  -e VPN_TYPE=wireguard \
+  -e WIREGUARD_PRIVATE_KEY=uM/X6zSy5yX4q5b35IE7asKaghWp22APULlvUxFnx0U= \
+  -e SERVER_COUNTRIES=France \
+  -e PORT_FORWARD_ONLY=on \
+  -e VPN_PORT_FORWARDING=on \
+  -e VPN_PORT_FORWARDING_PROVIDER=protonvpn \
+  -p 7878:7878 \
+  -p 8000:8000 \
+  -p 8082:8082 \
+  -p 8400:8000/tcp \
+  -p 8989:8989 \
+  -p 9117:9117 \
+  -p 9696:9696 \
+  -p 51820:51820/udp \
+  -v /storage/.config/dockers/gluetun:/gluetun \
+  --restart unless-stopped \
+  --platform linux/arm64 \
+  qmcgaw/gluetun
+
+# Inutile car recherche du serveur automatiquement
+  # -e SERVER_HOSTNAMES="node-fr-15.protonvpn.net" \
+
+# Gluetun
+  # -p 8400:8000/tcp \ # API (Surement plus utile ...)
+
+# wireguard
+  # -p 51820:51820/udp \ # ???
+
+# qBitTorrent
+  # -p 8082:8082 \ # WEB GUI
+# qBitTorrent mais pas exposé au LAN
+  # -p 6881:6881 \
+  # -p 6881:6881/udp \
+
+# Jackett
+  # -p 9117:9117 \ WEB GUI
+
+# Radarr
+  # -p 7878:7878 \ # WEB GUI
+
+# Powlarr
+#   -p 9696:9696 \ # WEB GUI
+
+# Flaresolverr 
+#   -p 8191:8191 \ # API (non utilisé sur le LAN)
+
+# Sonarr
+#   -p 8989:8989 \ WEB GUI
+
+# Pyload
+  # -p 8000:8000 \  # WEB GUI
+  # -p 9666:9666 \  # Click and Load API (non utilisé)
