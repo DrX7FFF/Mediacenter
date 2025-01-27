@@ -15,7 +15,7 @@ docker run -d \
   -e WIREGUARD_PRIVATE_KEY=uM/X6zSy5yX4q5b35IE7asKaghWp22APULlvUxFnx0U= \
   -e SERVER_COUNTRIES=France \
   -e PORT_FORWARD_ONLY=on \
-  -e HTTP_CONTROL_SERVER_ADDRESS='127.0.0.1:8080' \
+  -e HTTP_CONTROL_SERVER_ADDRESS=':8080' \
   -e HTTP_CONTROL_SERVER_LOG=on \
   -e VPN_PORT_FORWARDING=on \
   -e VPN_PORT_FORWARDING_PROVIDER=protonvpn \
@@ -33,11 +33,14 @@ docker run -d \
   --platform linux/arm64 \
   qmcgaw/gluetun
 
+# Ne fonctionne pas
+  # -e HTTP_CONTROL_SERVER_ADDRESS='127.0.0.1:8080' \
+
 # Inutile car recherche du serveur automatiquement
   # -e SERVER_HOSTNAMES="node-fr-15.protonvpn.net" \
 
 # Gluetun
-  # -p 8080:8080/tcp \ # API (Surement plus utile ...)
+  # -p 8000:8000/tcp \ # API (Surement plus utile ...)
 
 # wireguard
   # -p 51820:51820/udp \ # ???
@@ -64,5 +67,5 @@ docker run -d \
 #   -p 8989:8989 \ WEB GUI
 
 # Pyload
-  # -p 8000:8000 \  # WEB GUI
+  # -p 8000:8000 \  # WEB GUI (non modificable)
   # -p 9666:9666 \  # Click and Load API (non utilisé)
