@@ -25,14 +25,15 @@ dockers/jackett/Jackett/log.txt
 dockers/jackett/Jackett/updater.txt
 dockers/jackett/Jackett/Indexers/*.bak
 
-dockers/prowlarr/logs.db
+dockers/prowlarr/prowlarr.pid
+dockers/prowlarr/logs*
 dockers/prowlarr/logs/
 dockers/prowlarr/Definitions/
 
-dockers/radarr/logs.db
+dockers/radarr/logs*
 dockers/radarr/logs/
 dockers/radarr/MediaCover/
 
-dockers/sonarr/logs.db
+dockers/sonarr/logs*
 dockers/sonarr/logs/
 

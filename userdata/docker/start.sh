@@ -2,7 +2,7 @@
 
 source utils.sh
 
-./gluetun
+./gluetun.sh
 echo "Attente DNS"
 DNS=$(check_DNS)
 if [ $? -eq 0 ]; then
@@ -12,9 +12,10 @@ else
   exit 1
 fi
 
-./qbittorrent
-./flaresolverr
-./prowlarr
-./radarr
-./sonarr
-./pyload
+./qbittorrent.sh
+./jackett.sh
+./flaresolverr.sh
+./prowlarr.sh
+./radarr.sh
+./sonarr.sh
+./pyload.sh
