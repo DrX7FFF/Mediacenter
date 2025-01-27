@@ -1,4 +1,4 @@
-url="192.168.1.102:8400"
+url="192.168.1.102:8080"
 urlIP="/v1/publicip/ip"
 urlDNS="/v1/dns/status"
 urlPort="/v1/openvpn/portforwarded"

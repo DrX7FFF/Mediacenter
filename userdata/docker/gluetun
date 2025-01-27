@@ -3,6 +3,8 @@
 # https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/protonvpn.md
 # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/vpn-port-forwarding.md
 # https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-v3.1.x)
+  # -e VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1' \
+
 
 docker run -d \
   --name=vpn \
@@ -13,13 +15,15 @@ docker run -d \
   -e WIREGUARD_PRIVATE_KEY=uM/X6zSy5yX4q5b35IE7asKaghWp22APULlvUxFnx0U= \
   -e SERVER_COUNTRIES=France \
   -e PORT_FORWARD_ONLY=on \
+  -e HTTP_CONTROL_SERVER_ADDRESS='127.0.0.1:8080' \
+  -e HTTP_CONTROL_SERVER_LOG=on \
   -e VPN_PORT_FORWARDING=on \
   -e VPN_PORT_FORWARDING_PROVIDER=protonvpn \
-  -e VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1' \
+  -e VPN_PORT_FORWARDING_UP_COMMAND='/bin/sh -c "wget -O- --retry-connrefused --post-data \"json={\"listen_port\":${{PORTS}}}\" http://127.0.0.1:8082/api/v2/app/setPreferences 2>&1"' \
   -p 7878:7878 \
   -p 8000:8000 \
+  -p 8080:8080/tcp \
   -p 8082:8082 \
-  -p 8400:8000/tcp \
   -p 8989:8989 \
   -p 9117:9117 \
   -p 9696:9696 \
@@ -33,7 +37,7 @@ docker run -d \
   # -e SERVER_HOSTNAMES="node-fr-15.protonvpn.net" \
 
 # Gluetun
-  # -p 8400:8000/tcp \ # API (Surement plus utile ...)
+  # -p 8080:8080/tcp \ # API (Surement plus utile ...)
 
 # wireguard
   # -p 51820:51820/udp \ # ???

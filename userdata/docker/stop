@@ -2,6 +2,10 @@
 
 
 if [ -z "$1" ]; then
+    if docker inspect -f '{{.Name}}' $(docker ps -aq) | grep -q "/pyload"; then 
+        docker stop pyload
+        docker rm pyload
+    fi
     if docker inspect -f '{{.Name}}' $(docker ps -aq) | grep -q "/jackett"; then 
         docker stop jackett
         docker rm jackett

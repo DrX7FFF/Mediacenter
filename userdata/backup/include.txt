@@ -1,0 +1,14 @@
+dockers/
+dockers/gluetun/
+dockers/gluetun/auth/
+dockers/gluetun/auth/config.toml
+dockers/pyload/
+dockers/pyload/settings/
+dockers/pyload/settings/*
+dockers/qbittorrent/
+dockers/qbittorrent/qBittorrent/
+dockers/qbittorrent/qBittorrent/qBittorrent-data.conf
+dockers/qbittorrent/qBittorrent/qBittorrent.conf
+dockers/qbittorrent/qBittorrent/nova3/
+dockers/qbittorrent/qBittorrent/nova3/engines/
+dockers/qbittorrent/qBittorrent/nova3/engines/jackett.json
