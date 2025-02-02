@@ -26,7 +26,7 @@ docker run -d \
   -e WEBUI_PORT=8082 \
   -e TORRENTING_PORT="$port" \
   -v /storage/.config/dockers/qbittorrent:/config \
-  -v /media/HD1/downloads:/data/downloads \
+  -v /media/HD1/Servarr:/data/Servarr \
   --restart unless-stopped \
   --platform linux/arm64 \
   lscr.io/linuxserver/qbittorrent:latest

@@ -1,0 +1,4 @@
+addon_data/
+Database/
+library/
+Thumbnails/

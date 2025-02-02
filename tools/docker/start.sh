@@ -13,9 +13,9 @@ else
 fi
 
 ./qbittorrent.sh
-./jackett.sh
+# ./jackett.sh
 ./flaresolverr.sh
 ./prowlarr.sh
 ./radarr.sh
-./sonarr.sh
-./pyload.sh
+# ./sonarr.sh
+# ./pyload.sh
