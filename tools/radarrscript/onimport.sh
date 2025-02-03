@@ -4,86 +4,91 @@
 
 ### ATTENTION les chemins sont en référentiel Docker Radarr
 filmspath="/data/Films"
-radarrpath="/data/Servarr/Films"
 trashpath="/data/Servarr/Trash"
 downloadpath="/data/Servarr/Downloads"
-# logfile="/data/Servarr/radarr_event.log"
+logfile="/data/Servarr/radarr_event.log"
 
-if [[ "$radarr_eventtype" == "Test" ]]; then
-    filmname="Fake Movie (9999)"
-    # filmname="Armageddon (1998)"
-    # radarr_moviefile_sourcepath="/data/Servarr/Downloads/Armageddon.1998.Eng.Fre.Ger.Ita.Spa.Cze.Hun.Pol.Rus.1080p.BluRay.Remux.AVC.DTS-HD.MA-SGF.mkv"
-else
-    filmname="${radarr_movie_title} (${radarr_movie_year})"
-fi
+filmname="${radarr_movie_title} (${radarr_movie_year})"
+echo ">>>>>> $(date) Begin : $filmname" >> "$logfile"
+
+downloadedfile="$1"
+actualfilelink="$2"
+actualfile="$filmspath/$(basename "$radarr_deletedpaths")"
+echo "downloadedfile=\"$downloadedfile\"" >> "$logfile"
+echo "actualfilelink=\"$actualfilelink\"" >> "$logfile"
+echo "radarr_deletedpaths=\"$radarr_deletedpaths\"" >> "$logfile"
+echo "actualfile=\"$actualfile\"" >> "$logfile"
 
 ## Création d'un ticket pour le rejouer sauf si on vient d'un ticket
-if [[ -n "$ticketfile" ]]; then
+if [[ -z "$ticketfile" ]]; then
     ticketpath="/data/Servarr/Tickets"
     mkdir -p $ticketpath
     ticketfile="$ticketpath/$filmname.txt"
-    echo "radarr_eventtype=\"${radarr_eventtype}\"" >> "$ticketfile"
     echo "radarr_movie_title=\"${radarr_movie_title}\"" >> "$ticketfile"
     echo "radarr_movie_year=\"${radarr_movie_year}\"" >> "$ticketfile"
-    echo "radarr_moviefile_sourcepath=\"${radarr_moviefile_sourcepath}\"" >> "$ticketfile"
-    echo "radarr_moviefile_sourcefolder=\"${radarr_moviefile_sourcefolder}\"" >> "$ticketfile"
-    echo "radarr_isupgrade=\"${radarr_isupgrade}\"" >> "$ticketfile"
-    echo "radarr_moviefile_quality=\"${radarr_moviefile_quality}\"" >> "$ticketfile"
-    echo "radarr_deletedpaths=\"${radarr_deletedpaths}\"" >> "$ticketfile"
+    echo "downloadedfile=\"$downloadedfile\"" >> "$ticketfile"
+    echo "actualfilelink=\"$actualfilelink\"" >> "$ticketfile"
 else
-    echo "[INFO] Ticket already exists"
+    echo "[INFO] Ticket already exists \"$ticketfile\"" >> "$logfile"
 fi
 
+# printenv >> "$logfile"
+
 ## Vérifier que le download est bien présent
-if [[ ! -e "$radarr_moviefile_sourcepath" ]]; then
-    echo "[ERROR] Abort download not found \"$radarr_moviefile_sourcepath\""
+if [[ ! -e "$downloadedfile" ]]; then
+    echo "[ERROR] Abort download not found \"$downloadedfile\"" >> "$logfile"
     exit 1
 fi
 
-## Supression du ou des films existants
-mkdir -p "$trashpath"
-count=0
-declare -a deleted_files
-while read -r trashfile; do
-    ((count++))
-    echo "[INFO] Moving \"$trashfile\" to \"$trashpath\""
-    mv "$trashfile" "$trashpath"
-    if [[ "$?" -ne 0 ]]; then echo "[ERROR] Abort"; exit 1; fi
-    deleted_files+=("$trashpath/$(basename "$trashfile")")
-done < <(find "$filmspath" -name "$filmname.*" -type f)
-if [[ $count -gt 1 ]]; then echo "[WARN] Cleaning $count files"; fi
-
-## Supression des liens radarr
-filmlinkpath="$radarrpath/$filmname"
-echo "[INFO] Cleaning Radarr link in \"$filmlinkpath\""
-find "$filmlinkpath" -mindepth 1 -delete
-
-## Déplacement du film
-extension="${radarr_moviefile_sourcepath##*.}"
-if [[ "$radarr_moviefile_sourcepath" == "$extension" ]]; then extension=""; fi
-destpath="$filmspath/$filmname.$extension"
-echo "[INFO] Moving : \"$radarr_moviefile_sourcepath\" to \"$destpath\""
-mv "$radarr_moviefile_sourcepath" "$destpath"
-if [[ "$?" -ne 0 ]]; then echo "[ERROR] Abort"; exit 1; fi
-
-## Création du lien radarr (en référentiel docker Radarr)
-echo "[INFO] Creating Radarr link of \"$destpath\" in \"$filmlinkpath\""
-mkdir -p "$filmlinkpath"
-ln -s "$destpath" "$filmlinkpath"
-if [[ "$?" -ne 0 ]]; then echo "[ERROR] Continue"; fi
-
-## Vider dossier downloads
-if [[ "$radarr_moviefile_sourcefolder" != "$downloadpath" ]]; then
-    echo "[INFO] Deleting \"$radarr_moviefile_sourcefolder\""
-    rm -r "$radarr_moviefile_sourcefolder"
+## Déplacement du film dans la corbeille
+if [[ -e "$actualfile" ]]; then
+    mkdir -p "$trashpath"
+    echo "[INFO] Trashing \"$actualfile\" to \"$trashpath\"" >> "$logfile"
+    mv -f "$actualfile" "$trashpath"
+    if [[ "$?" -ne 0 ]]; then 
+        echo "[ERROR] Abort" >> "$logfile"
+        exit 1
+    fi
+else
+    echo "[INFO] No file to trash \"$actualfile\"" >> "$logfile"
 fi
 
-## Vider dossier trash
-for file in "${deleted_files[@]}"; do
-    echo "[INFO] Deleting \"$file\""
-    rm -f "$file"
-done
+## Déplacement du film
+destpath="$filmspath/$(basename "$downloadedfile")"
+echo "[INFO] Moving : \"$downloadedfile\" to \"$destpath\"" >> "$logfile"
+mv "$downloadedfile" "$destpath"
+if [[ "$?" -ne 0 ]]; then
+    echo "[ERROR] Abort" >> "$logfile"
+    exit 1
+fi
+
+## Création du lien radarr (en référentiel docker Radarr)
+filmlinkpath=$(dirname "$actualfilelink")
+echo "[INFO] Creating Radarr link of \"$destpath\" in \"$filmlinkpath\"" >> "$logfile"
+mkdir -p "$filmlinkpath"
+ln -s "$destpath" "$filmlinkpath"
+if [[ "$?" -ne 0 ]]; then
+    echo "[ERROR] Continue" >> "$logfile"
+fi
+
+## Vider dossier downloads
+dirtemp=$(dirname "$downloadedfile")
+if [[ "$dirtemp" != "$downloadpath" ]]; then
+    # Enlever le dossier racine pour obtenir la chaîne des sous-dossiers
+    subdirs=$(echo "$dirtemp" | sed "s|^$downloadpath/||")
+    # Extraire le premier sous-dossier (B)
+    first_subdir=$(echo "$subdirs" | cut -d'/' -f1)
+    # Supprimer le dossier et tout son contenu
+    echo "[INFO] Deleting \"$first_subdir\" de \"$downloadpath\"" >> "$logfile"
+    rm -r "$downloadpath/$first_subdir"
+fi
+
+# ## Vider dossier trash
+# for file in "${deleted_files[@]}"; do
+#     echo "[INFO] Deleting \"$file\"" >> "$logfile"
+#     rm -f "$file"
+# done
 
 ## Arrivé au bout, supprimer le ticket
 rm -f "$ticketfile"
-echo "$(date) : End $filmname"
+echo ">>>>>> $(date) End : $filmname" >> "$logfile"
