@@ -6,31 +6,28 @@
 filmspath="/data/Films"
 trashpath="/data/Servarr/Trash"
 downloadpath="/data/Servarr/Downloads"
+ticketpath="/data/Servarr/Tickets"
 logfile="/data/Servarr/radarr_event.log"
 
-filmname="${radarr_movie_title} (${radarr_movie_year})"
-echo ">>>>>> $(date) Begin : $filmname" >> "$logfile"
-
-downloadedfile="$1"
-actualfilelink="$2"
-actualfile="$filmspath/$(basename "$radarr_deletedpaths")"
-echo "downloadedfile=\"$downloadedfile\"" >> "$logfile"
-echo "actualfilelink=\"$actualfilelink\"" >> "$logfile"
-echo "radarr_deletedpaths=\"$radarr_deletedpaths\"" >> "$logfile"
-echo "actualfile=\"$actualfile\"" >> "$logfile"
-
 ## Création d'un ticket pour le rejouer sauf si on vient d'un ticket
+echo ">>>>>> $(date) Begin" >> "$logfile"
 if [[ -z "$ticketfile" ]]; then
-    ticketpath="/data/Servarr/Tickets"
+    echo "[INFO] From Radarr call" >> "$logfile"
+    
+    moviename="${radarr_movie_title} (${radarr_movie_year})"
+    downloadedfile="$1"
+    ticketfile="$ticketpath/$moviename.txt"
     mkdir -p $ticketpath
-    ticketfile="$ticketpath/$filmname.txt"
-    echo "radarr_movie_title=\"${radarr_movie_title}\"" >> "$ticketfile"
-    echo "radarr_movie_year=\"${radarr_movie_year}\"" >> "$ticketfile"
+    echo "moviename=\"$moviename\"" >> "$ticketfile"
     echo "downloadedfile=\"$downloadedfile\"" >> "$ticketfile"
-    echo "actualfilelink=\"$actualfilelink\"" >> "$ticketfile"
+    
+    echo "[INFO] Ticket created \"$ticketfile\"" >> "$logfile"
 else
-    echo "[INFO] Ticket already exists \"$ticketfile\"" >> "$logfile"
+    echo "[INFO] From ticket \"$ticketfile\"" >> "$logfile"
 fi
+
+echo "moviename=\"$moviename\"" >> "$logfile"
+echo "downloadedfile=\"$downloadedfile\"" >> "$logfile"
 
 # printenv >> "$logfile"
 
@@ -39,6 +36,8 @@ if [[ ! -e "$downloadedfile" ]]; then
     echo "[ERROR] Abort download not found \"$downloadedfile\"" >> "$logfile"
     exit 1
 fi
+
+exit 0
 
 ## Déplacement du film dans la corbeille
 if [[ -e "$actualfile" ]]; then
@@ -63,7 +62,6 @@ if [[ "$?" -ne 0 ]]; then
 fi
 
 ## Création du lien radarr (en référentiel docker Radarr)
-filmlinkpath=$(dirname "$actualfilelink")
 echo "[INFO] Creating Radarr link of \"$destpath\" in \"$filmlinkpath\"" >> "$logfile"
 mkdir -p "$filmlinkpath"
 ln -s "$destpath" "$filmlinkpath"
@@ -90,5 +88,6 @@ fi
 # done
 
 ## Arrivé au bout, supprimer le ticket
+echo "[INFO] Remove Ticket \"$ticketfile\"" >> "$logfile"
 rm -f "$ticketfile"
 echo ">>>>>> $(date) End : $filmname" >> "$logfile"
