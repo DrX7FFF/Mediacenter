@@ -6,7 +6,7 @@ cd ~/.kodi/userdata
 cd /storage/.kodi/userdata
 
 # Docker path :
-cd ~/.kodi/userdata/docker
+cd ~/.kodi/userdata/tools/docker
 cd ~/.config/dockers
 
 # renamer
