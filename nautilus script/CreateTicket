@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# a copier dans ~/.local/share/nautilus/scripts
+# + droits d'execution chmod +x
+
+ticketspath="/home/moi/mediaHD1/Servarr/Tickets"
+for fichier in "$@"; do
+    moviename=$(basename "${fichier%.*}")
+    download=$(basename "${fichier}")
+    ticket="$ticketspath/$moviename.txt"
+    echo "moviename=\"$moviename\"" > "$ticket"
+    echo "downloadedfile=\"/data/Servarr/Downloads/$download\"" >> "$ticket"
+done

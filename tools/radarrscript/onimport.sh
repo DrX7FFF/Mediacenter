@@ -12,15 +12,15 @@ logfile="/data/Servarr/radarr_event.log"
 
 ## Création d'un ticket pour le rejouer sauf si on vient d'un ticket
 echo ">>>>>> $(date) Begin" >> "$logfile"
-echo "[DEBUG] radarr_movie_title=\"$radarr_movie_title\"" >> "$logfile"
-echo "[DEBUG] radarr_movie_year=\"$radarr_movie_year\"" >> "$logfile"
-echo "[DEBUG] @=\"$@\"" >> "$logfile"
-echo "[DEBUG] ticketfile=\"$ticketfile\"" >> "$logfile"
+# echo "[DEBUG] radarr_movie_title=\""${radarr_movie_title:-}"\"" >> "$logfile"
+# echo "[DEBUG] radarr_movie_year=\""${radarr_movie_year:-}"\"" >> "$logfile"
+# echo "[DEBUG] @=\"$@\"" >> "$logfile"
+# echo "[DEBUG] ticketfile=\"$ticketfile\"" >> "$logfile"
 # printenv >> "$logfile"
 
 if [[ -z "${ticketfile:-}" ]]; then
     echo "[INFO] From Radarr call" >> "$logfile"
-    if [[ -z "$radarr_movie_title" || -z "$radarr_movie_year" ]]; then
+    if [[ -z "${radarr_movie_title:-}" || -z "${radarr_movie_year:-}" ]]; then
         echo "[ERROR] Abort : missing movie title or year" >> "$logfile"
         exit 1
     fi
@@ -36,9 +36,11 @@ else
     echo "[INFO] From ticket \"$ticketfile\"" >> "$logfile"
 fi
 
+[[ -n "${moviename:-}" ]] || { echo "[ERROR] Abort : \"moviename\" not definned" >> "$logfile"; exit 1; }
+[[ -n "${downloadedfile:-}" ]] || { echo "[ERROR] Abort : \"downloadedfile\" not definned" >> "$logfile"; exit 1; }
+
 echo "moviename=\"$moviename\"" >> "$logfile"
 echo "downloadedfile=\"$downloadedfile\"" >> "$logfile"
-
 
 ## Vérifier que le download est bien présent
 [[ -e "$downloadedfile" ]] || { echo "[ERROR] Abort download not found \"$downloadedfile\"" >> "$logfile"; exit 1; }
@@ -48,11 +50,12 @@ echo "downloadedfile=\"$downloadedfile\"" >> "$logfile"
 trashfiles="$filmspath/$moviename"
 mkdir -p "$trashpath"
 echo "[INFO] Trashing \"$trashfiles\".* to \"$trashpath/\"" >> "$logfile"
+shopt -s nullglob
 for file in "$trashfiles".*; do
     echo "[INFO] Trashing \"$file\" to \"$trashpath/\"" >> "$logfile"
     [[ -e "$file" ]] && mv -f "$file" "$trashpath/" || { echo "[ERROR] Abort" >> "$logfile"; exit 1; }
 done
-
+shopt -u nullglob  # Désactive nullglob après usage
 
 ## Déplacement du film
 [[ "$downloadedfile" == *.* ]] && extension="${downloadedfile##*.}" || extension=""
