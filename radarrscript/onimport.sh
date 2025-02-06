@@ -6,7 +6,7 @@ set -eu
 filmspath="/data/Films"
 radarrpath="/data/Servarr/Films"
 trashpath="/data/Servarr/Trash"
-downloadpath="/data/Servarr/Downloads"
+# downloadpath="/data/Servarr/Downloads"
 ticketpath="/data/Servarr/Tickets"
 logfile="/data/Servarr/radarr_event.log"
 
@@ -39,8 +39,8 @@ fi
 [[ -n "${moviename:-}" ]] || { echo "[ERROR] Abort : \"moviename\" not definned" >> "$logfile"; exit 1; }
 [[ -n "${downloadedfile:-}" ]] || { echo "[ERROR] Abort : \"downloadedfile\" not definned" >> "$logfile"; exit 1; }
 
-echo "moviename=\"$moviename\"" >> "$logfile"
-echo "downloadedfile=\"$downloadedfile\"" >> "$logfile"
+echo "[DEBUG] moviename=\"$moviename\"" >> "$logfile"
+echo "[DEBUG] downloadedfile=\"$downloadedfile\"" >> "$logfile"
 
 ## Vérifier que le download est bien présent
 [[ -e "$downloadedfile" ]] || { echo "[ERROR] Abort download not found \"$downloadedfile\"" >> "$logfile"; exit 1; }
@@ -57,11 +57,11 @@ for file in "$trashfiles".*; do
 done
 shopt -u nullglob  # Désactive nullglob après usage
 
-## Déplacement du film
+## Création d'un harlink depuis le download vers le film
 [[ "$downloadedfile" == *.* ]] && extension="${downloadedfile##*.}" || extension=""
 destfile="$filmspath/$moviename.$extension"
-echo "[INFO] Moving : \"$downloadedfile\" to \"$destfile\"" >> "$logfile"
-mv -f "$downloadedfile" "$destfile" || { echo "[ERROR] Abort" >> "$logfile"; exit 1; }
+echo "[INFO] Hardlink : \"$downloadedfile\" to \"$destfile\"" >> "$logfile"
+ln "$downloadedfile" "$destfile" || { echo "[ERROR] Abort" >> "$logfile"; exit 1; }
 
 
 ## Création du lien radarr (en référentiel docker Radarr)
@@ -72,15 +72,15 @@ ln -s "$destfile" "$filmlinkpath" || echo "[ERROR] Continue" >> "$logfile"
 
 
 ## Vider dossier downloads
-dirtemp=$(dirname "$downloadedfile")
-if [[ "$dirtemp" != "$downloadpath" ]]; then
-    # Enlever le dossier racine pour obtenir la chaîne des sous-dossiers
-    # Extraire le premier sous-dossier (B)
-    first_subdir=$(echo "$dirtemp" | sed "s|^$downloadpath/||" | cut -d'/' -f1)
-    # Supprimer le dossier et tout son contenu
-    echo "[INFO] Deleting \"$first_subdir\" de \"$downloadpath\"" >> "$logfile"
-    rm -rf "$downloadpath/$first_subdir"
-fi
+# dirtemp=$(dirname "$downloadedfile")
+# if [[ "$dirtemp" != "$downloadpath" ]]; then
+#     # Enlever le dossier racine pour obtenir la chaîne des sous-dossiers
+#     # Extraire le premier sous-dossier (B)
+#     first_subdir=$(echo "$dirtemp" | sed "s|^$downloadpath/||" | cut -d'/' -f1)
+#     # Supprimer le dossier et tout son contenu
+#     echo "[INFO] Deleting \"$first_subdir\" de \"$downloadpath\"" >> "$logfile"
+#     rm -rf "$downloadpath/$first_subdir"
+# fi
 
 ## Arrivé au bout, supprimer le ticket
 echo "[INFO] Remove Ticket \"$ticketfile\"" >> "$logfile"
