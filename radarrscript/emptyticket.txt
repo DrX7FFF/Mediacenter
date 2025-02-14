@@ -1,2 +1,0 @@
-moviename=""
-downloadedfile="/data/Servarr/Downloads/"
