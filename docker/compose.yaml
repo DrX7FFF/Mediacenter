@@ -1,0 +1,63 @@
+services:
+  vpn:
+    image: qmcgaw/gluetun
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=uM/X6zSy5yX4q5b35IE7asKaghWp22APULlvUxFnx0U=
+      - SERVER_COUNTRIES=France
+      - PORT_FORWARD_ONLY=on
+      - HTTP_CONTROL_SERVER_ADDRESS=':8080'
+      - HTTP_CONTROL_SERVER_LOG=on
+      - VPN_PORT_FORWARDING=on
+      - VPN_PORT_FORWARDING_PROVIDER=protonvpn
+      - VPN_PORT_FORWARDING_UP_COMMAND='/bin/sh -c "wget -O- --retry-connrefused --post-data \"json={\"listen_port\":$$PORTS}\" http://127.0.0.1:8082/api/v2/app/setPreferences 2>&1"'
+    ports:
+      # - "7878:7878"         # Radarr WEB GUI
+      # - "8000:8000"         # ???
+      - "8080:8080/tcp"     # Gluerun API 
+      - "8082:8082"         # qBitTorrent WEB GUI
+      # - "8989:8989"         # Sonarr WEB GUI
+      - "9117:9117"         # Jackett WEB GUI
+      # - "9696:9696"         # Powlarr WEB GUI
+      - "51820:51820/udp"   # wireguard
+    volumes:
+      - /storage/.config/dockers/gluetun:/gluetun
+    restart: unless-stopped
+    platform: linux/arm64
+
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    network_mode: "service:vpn"
+    environment:
+      - TZ=Europe/Paris
+      - PUID=1000
+      - PGID=1000
+      - AUTO_UPDATE=true
+    volumes:
+      - /storage/.config/dockers/jackett:/config
+    restart: unless-stopped
+    platform: linux/arm64
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: "service:vpn"
+    entrypoint: /bin/bash /config/qbittorrent-prescript.sh
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+      - WEBUI_PORT=8082
+      # - TORRENTING_PORT="$port"
+    volumes:
+      - /storage/.config/dockers/qbittorrent:/config
+      - /media/HD1:/data
+    restart: unless-stopped
+    platform: linux/arm64

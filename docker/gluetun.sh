@@ -33,9 +33,6 @@ docker run -d \
   --platform linux/arm64 \
   qmcgaw/gluetun
 
-# Ne fonctionne pas
-  # -e HTTP_CONTROL_SERVER_ADDRESS='127.0.0.1:8080' \
-
 # Inutile car recherche du serveur automatiquement
   # -e SERVER_HOSTNAMES="node-fr-15.protonvpn.net" \
 

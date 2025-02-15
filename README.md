@@ -42,8 +42,24 @@ cd /storage/.kodi/userdata
 ## Docker path :
 cd ~/.config/dockers
 
+## docker compose release :
+https://github.com/docker/compose/releases
+
+install :
+curl -SL https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-armv7 -o docker-compose
+chmod +x docker-compose
+
+
 ## Générateur de clés pour le site Gluetun
 docker run --rm qmcgaw/gluetun genkey
 
 ## gh cli binary :
 https://github.com/cli/cli/releases
+
+## déclarer tools dans path
+création du fichier .profile dans /storage avec la ligne :
+PATH="/storage/.kodi/tools:$PATH"
+
+(Juste pour mettre le path à jour temporairement)
+export PATH=/storage/.kodi/tools:$PATH
+
