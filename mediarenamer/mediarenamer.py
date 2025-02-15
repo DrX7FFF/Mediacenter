@@ -114,7 +114,11 @@ def renameMovies(con, paths, dryrun=False, local=False):
 		# 	filesList.remove(fullpath.replace('/media/HD1','/mnt/mediacenter'))
 		# else:
 		# 	filesList.remove(fullpath)
-		filesList.remove(fullpath)
+		try:
+			filesList.remove(fullpath)
+		except ValueError:
+			print("File not been listed or same file for multiple entry in DB : {}".format(fullpath), file=sys.stderr)
+			continue
 
 		# Test if file already exist except when local
 		if not local and not os.path.exists(fullpath):
