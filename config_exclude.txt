@@ -10,10 +10,6 @@ miniresmon/
 
 dockers/gluetun/servers.json
 
-dockers/pyload/data/
-dockers/pyload/logs/
-dockers/pyload/plugins/
-
 dockers/qbittorrent/.cache
 dockers/qbittorrent/qBittorrent/categories.json
 dockers/qbittorrent/qBittorrent/watched_folders.json
@@ -24,16 +20,3 @@ dockers/qbittorrent/qBittorrent/GeoDB/
 dockers/jackett/Jackett/log.txt
 dockers/jackett/Jackett/updater.txt
 dockers/jackett/Jackett/Indexers/*.bak
-
-dockers/prowlarr/prowlarr.pid
-dockers/prowlarr/logs*
-dockers/prowlarr/logs/
-dockers/prowlarr/Definitions/
-
-dockers/radarr/logs*
-dockers/radarr/logs/
-dockers/radarr/MediaCover/
-
-dockers/sonarr/logs*
-dockers/sonarr/logs/
-

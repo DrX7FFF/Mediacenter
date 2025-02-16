@@ -4,10 +4,6 @@ dockers/gluetun/
 dockers/gluetun/auth/
 dockers/gluetun/auth/config.toml
 
-dockers/pyload/
-dockers/pyload/settings/
-dockers/pyload/settings/*
-
 dockers/qbittorrent/
 dockers/qbittorrent/qBittorrent/
 dockers/qbittorrent/qBittorrent/qBittorrent-data.conf
@@ -23,21 +19,3 @@ dockers/jackett/Jackett/DataProtection/
 dockers/jackett/Jackett/DataProtection/*
 dockers/jackett/Jackett/Indexers/
 dockers/jackett/Jackett/Indexers/*
-
-dockers/prowlarr/
-dockers/prowlarr/config.xml
-dockers/prowlarr/prowlarr.db
-dockers/prowlarr/asp
-dockers/prowlarr/asp/*
-
-dockers/radarr/
-dockers/radarr/config.xml
-dockers/radarr/radarr.db
-dockers/radarr/asp
-dockers/radarr/asp/*
-
-dockers/sonarr/
-dockers/sonarr/config.xml
-dockers/sonarr/sonarr.db
-dockers/sonarr/asp
-dockers/sonarr/asp/*
