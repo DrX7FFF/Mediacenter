@@ -30,4 +30,7 @@ chmod +x "$toolsfolder/restore.sh"
 chmod +x "$toolsfolder/mediarenamer.py"
 chmod +x "$toolsfolder/status.sh"
 
+
 # chmod +x "$toolsfolder/qbittorrent-prescript.sh"
+
+cp "$toolsfolder/config/profile" "/storage/.profile"
