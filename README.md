@@ -2,7 +2,7 @@
 
 ## Installation
 ```
-sh -c "$(curl https://raw.githubusercontent.com/DrX7FFF/Mediacenter/main/install.sh)"
+sh -c "$(curl -s https://raw.githubusercontent.com/DrX7FFF/Mediacenter/main/install.sh)"
 ```
 
 ## Download
