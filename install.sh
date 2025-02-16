@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="2"
+VERSION="3"
 
 appname="Mediacenter"
 dockercomposeurl="https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-armv7"
@@ -18,7 +18,7 @@ curl "https://github.com/DrX7FFF/$appname/archive/refs/heads/main.zip" -o "$temp
 unzip -o "$tempfile" -d "$tempfolder"
 cp -rf "$tempfolder/$appname-main/." "$toolsfolder"
 rm "$tempfile"
-rmdir -r "$tempfolder"
+rm -r "$tempfolder"
 
 # Download docker-compose
 curl "$dockercomposeurl" -o "$toolsfolder/docker-compose"
