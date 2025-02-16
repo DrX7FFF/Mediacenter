@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="7"
+VERSION="8"
 
 appname="Mediacenter"
 dockercomposeurl="https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-armv7"
@@ -29,8 +29,6 @@ chmod +x "$toolsfolder/backup.sh"
 chmod +x "$toolsfolder/restore.sh"
 chmod +x "$toolsfolder/mediarenamer.py"
 chmod +x "$toolsfolder/status.sh"
-
 chmod +x "$toolsfolder/qbittorrent-prescript.sh"
-cp -f "$toolsfolder/qbittorrent-prescript.sh" 
 
 cp -f "$toolsfolder/config/profile" "/storage/.profile"
