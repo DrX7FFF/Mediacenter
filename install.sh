@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="6"
+VERSION="7"
 
 appname="Mediacenter"
 dockercomposeurl="https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-armv7"
@@ -21,7 +21,7 @@ rm "$tempfile"
 rm -r "$tempfolder"
 
 # Download docker-compose
-curl "$dockercomposeurl" -o "$toolsfolder/docker-compose"
+curl -L "$dockercomposeurl" -o "$toolsfolder/docker-compose"
 
 # Make executable
 chmod +x "$toolsfolder/docker-compose"
@@ -30,7 +30,7 @@ chmod +x "$toolsfolder/restore.sh"
 chmod +x "$toolsfolder/mediarenamer.py"
 chmod +x "$toolsfolder/status.sh"
 
-
-# chmod +x "$toolsfolder/qbittorrent-prescript.sh"
+chmod +x "$toolsfolder/qbittorrent-prescript.sh"
+cp -f "$toolsfolder/qbittorrent-prescript.sh" 
 
 cp -f "$toolsfolder/config/profile" "/storage/.profile"
