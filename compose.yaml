@@ -62,3 +62,19 @@ services:
       - /media/HD1:/data
     restart: unless-stopped
     platform: linux/arm64
+
+  mkvtoolnix:
+    image: jlesage/mkvtoolnix
+    container_name: mkvtoolnix
+    environment:
+      - TZ=Europe/Paris
+      - PUID=1000
+      - PGID=1000
+      - DARK_MODE=1
+    volumes:
+      - /storage/.config/dockers/mkvtoolnix:/config:rw
+      - /media/HD1:/storage  # Monte le répertoire des films
+    ports:
+      - "5800:5800"  # Expose le port 5000 pour l'interface web
+    restart: always  # Redémarre le conteneur si nécessaire
+    platform: linux/arm64
