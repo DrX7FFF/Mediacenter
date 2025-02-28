@@ -16,7 +16,7 @@ rsync -av \
     --exclude-from="$SCRIPT_DIR/config/config_exclude.txt" \
     $DRY_RUN \
     /storage/.config/ \
-    /media/HD1/backup/config/
+    /media/HD1/Backup/config/
 
 rsync -av \
     --delete \
@@ -24,4 +24,4 @@ rsync -av \
     --exclude-from="$SCRIPT_DIR/config/userdata_exclude.txt" \
     $DRY_RUN \
     /storage/.kodi/userdata/ \
-    /media/HD1/backup/userdata/
+    /media/HD1/Backup/userdata/

@@ -12,12 +12,12 @@ rsync -av \
     --include-from="$SCRIPT_DIR/config/config_include.txt" \
     --exclude='*' \
     $DRY_RUN \
-    /media/HD1/backup/config/ \
+    /media/HD1/Backup/config/ \
     /storage/.config/
 
 rsync -av \
     --include-from="$SCRIPT_DIR/config/userdata_include.txt" \
     --exclude='*' \
     $DRY_RUN \
-    /media/HD1/backup/userdata/ \
+    /media/HD1/Backup/userdata/ \
     /storage/.kodi/userdata/
