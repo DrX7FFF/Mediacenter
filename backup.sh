@@ -4,6 +4,8 @@
 DRY_RUN=""
 if [[ "$1" == "dry" ]]; then
     DRY_RUN="--dry-run"
+else
+    mkdir -p "/media/HD1/backup/config" "/media/HD1/backup/userdata"
 fi
 
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
