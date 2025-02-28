@@ -18,5 +18,7 @@ dockers/qbittorrent/qBittorrent/logs/
 dockers/qbittorrent/qBittorrent/GeoDB/
 
 dockers/jackett/Jackett/log.txt
-dockers/jackett/Jackett/updater.txt
+dockers/jackett/Jackett/updater.txt*
 dockers/jackett/Jackett/Indexers/*.bak
+
+dockers/mkvtoolnix/

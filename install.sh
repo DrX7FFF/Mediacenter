@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="2"
+VERSION="3"
 
 appname="Mediacenter"
 dockercomposeurl="https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-armv7"
