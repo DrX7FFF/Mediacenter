@@ -49,7 +49,7 @@ services:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     network_mode: "service:vpn"
-    entrypoint: /bin/bash /config/tools/qbittorrent-prescript.sh
+    entrypoint: /bin/bash /tools/qbittorrent-prescript.sh
     environment:
       - PUID=0
       - PGID=0
@@ -58,8 +58,9 @@ services:
       # - TORRENTING_PORT="$port"
     volumes:
       - /storage/.config/dockers/qbittorrent:/config
-      - /storage/.kodi/tools:/config/tools
+      - /storage/.kodi/tools:/tools
       - /media/HD1:/data
+      - /media/HD2/Downloading:/downloading
     restart: unless-stopped
     platform: linux/arm64
 
