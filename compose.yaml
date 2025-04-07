@@ -16,7 +16,8 @@ services:
       - HTTP_CONTROL_SERVER_LOG=on
       - VPN_PORT_FORWARDING=on
       - VPN_PORT_FORWARDING_PROVIDER=protonvpn
-      - VPN_PORT_FORWARDING_UP_COMMAND='/bin/sh -c "wget -O- --retry-connrefused --post-data \"json={\"listen_port\":$$PORTS}\" http://127.0.0.1:8082/api/v2/app/setPreferences 2>&1"'
+      # - VPN_PORT_FORWARDING_UP_COMMAND='/bin/sh -c "wget -O- --retry-connrefused --post-data \"json={\"listen_port\":$$PORTS}\" http://127.0.0.1:8082/api/v2/app/setPreferences 2>&1"'
+      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh /tools/vpn_portworward.sh $$PORTS
     ports:
       # - "7878:7878"         # Radarr WEB GUI
       # - "8000:8000"         # ???
@@ -28,6 +29,7 @@ services:
       - "51820:51820/udp"   # wireguard
     volumes:
       - /storage/.config/dockers/gluetun:/gluetun
+      - /storage/.kodi/tools:/tools
     restart: unless-stopped
     platform: linux/arm64
 

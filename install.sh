@@ -25,10 +25,11 @@ curl -L "$dockercomposeurl" -o "$toolsfolder/docker-compose"
 
 # Make executable
 chmod +x "$toolsfolder/docker-compose"
-chmod +x "$toolsfolder/backup.sh"
-chmod +x "$toolsfolder/restore.sh"
+# chmod +x "$toolsfolder/backup.sh"
+# chmod +x "$toolsfolder/restore.sh"
 chmod +x "$toolsfolder/mediarenamer.py"
-chmod +x "$toolsfolder/status.sh"
-chmod +x "$toolsfolder/qbittorrent-prescript.sh"
+# chmod +x "$toolsfolder/status.sh"
+# chmod +x "$toolsfolder/qbittorrent-prescript.sh"
+chmod +x "$toolsfolder/*.sh"
 
 cp -f "$toolsfolder/config/profile" "/storage/.profile"
