@@ -16,6 +16,21 @@ cd /storage/.kodi/userdata
 cd /storage/.config/dockers
 ```
 
+## Cmd
+```
+docker-compose down && docker-compose up -d
+docker-compose down
+docker-compose up -d
+docker system prune -a -f
+docker logs -f vpn
+status.sh
+docker exec -it vpn sh
+docker exec -it qbittorrent sh
+docker exec -it mkvtoolnix sh
+```
+chmod -R 777 /var/media/HD1 && chown -R nobody:nogroup /var/media/HD1
+```
+
 ## docker compose release :
 https://github.com/docker/compose/releases
 
